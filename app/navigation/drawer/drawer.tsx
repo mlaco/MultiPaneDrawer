@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Text, ViewStyle, View, Animated, SafeAreaView } from "react-native"
+import { Text, ViewStyle, View, Animated, SafeAreaView, TouchableOpacity } from "react-native"
 import { NavigationInjectedProps } from "react-navigation"
 
 const CONTAINER: ViewStyle = {
@@ -9,6 +9,7 @@ const CONTAINER: ViewStyle = {
 
 interface DrawerState {
   drawerWidth?: number
+  displayLeftPane?: boolean
 }
 
 /**
@@ -17,9 +18,11 @@ interface DrawerState {
 export class Drawer extends React.Component<NavigationInjectedProps, DrawerState> {
   state = {
     drawerWidth: 0,
+    displayLeftPane: false,
   }
   render() {
-    const { drawerWidth } = this.state
+    const { drawerWidth, displayLeftPane } = this.state
+    const paneShift = displayLeftPane ? 0 : -drawerWidth
     return (
       <SafeAreaView
         onLayout={event => {
@@ -30,29 +33,50 @@ export class Drawer extends React.Component<NavigationInjectedProps, DrawerState
         style={{
           flexDirection: "row",
           height: "100%",
+          overflow: "hidden",
         }}
       >
         {/* Left Pane */}
         <Animated.View
           style={{
-            left: -drawerWidth,
+            left: paneShift,
             width: drawerWidth,
             backgroundColor: "#00c3e3",
           }}
         >
           <Text>Left Pane</Text>
+          {this.renderSlideButton()}
         </Animated.View>
         {/* Right Pane */}
         <Animated.View
           style={{
-            left: -drawerWidth,
+            left: paneShift,
             width: drawerWidth,
             backgroundColor: "#ff4554",
           }}
         >
           <Text>Right Pane</Text>
+          {this.renderSlideButton()}
         </Animated.View>
       </SafeAreaView>
+    )
+  }
+
+  renderSlideButton() {
+    return (
+      <TouchableOpacity
+        style={{
+          height: 100,
+          marginVertical: 50,
+        }}
+        onPress={() => {
+          this.setState({
+            displayLeftPane: !this.state.displayLeftPane,
+          })
+        }}
+      >
+        <Text>Slide Drawer</Text>
+      </TouchableOpacity>
     )
   }
 }
