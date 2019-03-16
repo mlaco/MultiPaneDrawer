@@ -1,12 +1,17 @@
-import { createStackNavigator } from "react-navigation"
+import { createStackNavigator, createDrawerNavigator } from "react-navigation"
 import { ExampleNavigator } from "./example-navigator"
+import { Drawer } from "./drawer/drawer"
+import { FirstExampleScreen } from "../screens/first-example-screen"
 
-export const RootNavigator = createStackNavigator(
+export const RootNavigator = createDrawerNavigator(
   {
-    exampleStack: { screen: ExampleNavigator },
+    exampleScreen: { screen: FirstExampleScreen },
   },
   {
-    headerMode: "none",
-    navigationOptions: { gesturesEnabled: false },
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+    initialRouteName: "exampleScreen",
+    contentComponent: Drawer,
   },
 )
